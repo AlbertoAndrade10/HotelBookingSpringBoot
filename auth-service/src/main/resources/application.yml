@@ -5,7 +5,7 @@ spring:
   application:
     name: auth-service
   datasource:
-    url: jdbc:mysql://localhost:3307/hotel_booking?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3307/hotel_booking?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: user
     password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -26,5 +26,5 @@ eureka:
 
 # JWT
 jwt:
-  secret: mySecretKey
+  secret: UeCKml7Lyray3aKWOh22rctqcBTxEHPfybmMWghQK0o=
   expiration: 86400000

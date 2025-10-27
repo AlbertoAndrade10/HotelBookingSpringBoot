@@ -1,20 +1,22 @@
 package com.porfolio.auth_service.service;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-
-
 import com.porfolio.auth_service.entity.User;
 import com.porfolio.auth_service.repository.UserRepository;
 import com.porfolio.auth_service.security.JwtUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication; 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AuthServiceImpl implements IAuthService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -29,32 +31,39 @@ public class AuthServiceImpl implements IAuthService {
     private JwtUtil jwtUtil;
 
     @Override
-    public User registerUser(String email, String name, String password) {
+    public User registerUser(String email, String name, String lastName, String password) {
+        logger.info("AuthServiceImpl: Intentando registrar usuario con email: {}", email);
 
         if (userRepository.findByEmail(email).isPresent()) {
+            logger.warn("AuthServiceImpl: Usuario ya existe con email: {}", email);
             throw new RuntimeException("User already exists");
         }
 
         User user = new User();
         user.setEmail(email);
         user.setName(name);
+        user.setLastName(lastName);
         user.setPassword(passwordEncoder.encode(password));
+        user.setRole("USER");
 
-        return userRepository.save(user);
+        logger.info("AuthServiceImpl: Contraseña encriptada. Guardando usuario en base de datos...");
+        User savedUser = userRepository.save(user);
+        logger.info("AuthServiceImpl: Usuario guardado exitosamente con ID: {}", savedUser.getId());
+        return savedUser;
     }
 
     @Override
     public String loginUser(String email, String password) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-        var userDetails = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        return jwtUtil.generateToken(
-            org.springframework.security.core.userdetails.User.builder()
-                .username(userDetails.getEmail())
-                .password(userDetails.getPassword())
-                .authorities("USER")
-                .build()
-        );
-    }
+        logger.info("AuthServiceImpl: Intentando login para email: {}", email);
 
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password);
+
+        Authentication authentication = authenticationManager.authenticate(authToken);
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        logger.info("AuthServiceImpl: Autenticación exitosa para email: {}", userDetails.getUsername());
+        
+        return jwtUtil.generateToken(userDetails);
+    }
 }
