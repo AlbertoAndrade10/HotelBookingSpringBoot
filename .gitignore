@@ -1,0 +1,129 @@
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs
+*.log
+
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Icon?
+desktop.ini
+
+# Eclipse
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+
+# Target
+target/
+.DS_Store
+
+# Spring Boot
+!mvnw
+!mvnw.cmd
+!gradlew
+!gradlew.bat
+
+# Maven
+lib/
+out/
+
+# Gradle
+.gradle/
+build/
+
+# Package manager
+node_modules/
+
+# Local configuration
+*.local
+
+# Compiled class file
+*.class
+
+# Log
+*.log
+
+# BlueJ
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Virtual Machine crash logs
+hs_err_pid*
+
+# Spring Boot Devtools
+.springBeans
+
+# User-generated data files
+*.data
+
+# Docker
+.docker/
+
+# Configuración local de Spring (si usas application-local.yml, por ejemplo)
+application-local.yml
+application-dev.yml
+
+# Archivos temporales de Windows
+[Dd]esktop.ini
+*.tmp
+*.temp
+
+# Archivos temporales de compilación de Java
+*.jar
+*.war
+*.class
+*.ear
+*.jdoc
+!src/main/resources/**/application*.yml
+!src/main/resources/**/application*.properties
+
+# Configuración de entornos locales
+.env
+.env.local
+.env.*.local
+
+# Carpetas de coverage o test
+coverage/
+.jacoco/
+
+# Archivos de SonarQube
+.sonar/
+
+# Archivos de cache de herramientas
+node_modules/
+*.lock
+!package-lock.json
+!yarn.lock
+
+# Otros
+.DS_Store
+Thumbs.db
