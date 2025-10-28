@@ -1,20 +1,21 @@
-package main.java.com.porfolio.hotel_service.entity;
+package com.porfolio.hotel_service.entity;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "hotels")
 @Getter
 @Setter
-@Data
 public class Hotel {
-
-
+    
     @Id
-    @GeneratedValue(strtrategy=GenerationType.IDENTY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -27,7 +28,8 @@ public class Hotel {
     private String city;
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Room> rooms;
-    
+
     
 }

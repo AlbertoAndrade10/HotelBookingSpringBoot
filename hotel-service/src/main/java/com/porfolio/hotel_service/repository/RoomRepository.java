@@ -1,10 +1,11 @@
-package main.java.com.porfolio.hotel_service.repository;
-import com.porfolio.hotelservice.entity.Room;
-import org.springframework.data.jpa.repository.JpaRepository;
+package com.porfolio.hotel_service.repository;
+
 import java.util.List;
 
-public interface RoomRepository extends JpaRepository<Room, Long> {
+import org.springframework.data.jpa.repository.JpaRepository;
 
-    List<Room> findByHotelId(Long hotelId);
-    
+import com.porfolio.hotel_service.entity.Room;
+
+public interface RoomRepository extends JpaRepository<Room, Long> {
+    List<Room> findByHotel_Id(Long hotelId);
 }

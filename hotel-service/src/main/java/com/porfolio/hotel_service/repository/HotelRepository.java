@@ -1,11 +1,9 @@
-package main.java.com.porfolio.hotel_service.repository;
+package com.porfolio.hotel_service.repository;
 
-import com.porfolio.hotelservice.entity.Hotel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.porfolio.hotel_service.entity.Hotel;
 
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
-
-    
 }
