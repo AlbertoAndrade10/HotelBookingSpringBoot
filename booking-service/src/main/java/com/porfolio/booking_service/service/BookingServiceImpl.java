@@ -12,6 +12,11 @@ import com.porfolio.booking_service.client.HotelServiceClient;
 import com.porfolio.booking_service.client.UserServiceClient;
 import com.porfolio.booking_service.entity.Booking;
 import com.porfolio.booking_service.entity.BookingStatus;
+import com.porfolio.booking_service.exception.BookingNotFoundException;
+import com.porfolio.booking_service.exception.InvalidBookingDatesException;
+import com.porfolio.booking_service.exception.MinimunStayException;
+import com.porfolio.booking_service.exception.RoomNotFoundException;
+import com.porfolio.booking_service.exception.UserNotFoundException;
 import com.porfolio.booking_service.repository.BookingRepository;
 
 import jakarta.transaction.Transactional;
@@ -30,19 +35,29 @@ public class BookingServiceImpl implements IBookingService {
     @Override
     public Booking createBooking(Long userId, Long roomId, LocalDateTime checkIn, LocalDateTime checkOut) {
 
+        // validate dates
+        if (checkIn.isAfter(checkOut) || checkIn.isEqual(checkOut)) {
+            throw new InvalidBookingDatesException("Check-in date must be before check-out date.");
+        }
+
         // step 1. validate user
         var user = userServiceClient.getUserById(userId);
         if (user == null) {
-            throw new RuntimeException("User not found with id: " + userId);
+            throw new UserNotFoundException("User not found with id: " + userId);
         }
         // step 2. get room details
         var room = hotelServiceClient.getRoomById(roomId);
         if (room == null) {
-            throw new RuntimeException("room not found with id: " + roomId);
+            throw new RoomNotFoundException("Room not found with id: " + roomId);
         }
 
         // step 3. calculate total price
         long days = Duration.between(checkIn, checkOut).toDays();
+
+        if (days == 0) {
+            throw new MinimunStayException("A booking must be for a least one night");
+        }
+
         BigDecimal pricePerNight = room.pricePerNight();
         BigDecimal totalPrice = pricePerNight.multiply(BigDecimal.valueOf(days));
 
@@ -67,7 +82,7 @@ public class BookingServiceImpl implements IBookingService {
     @Override
     public Booking getBookingById(Long id) {
         return bookingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Booking not found with id: " + id));
+                .orElseThrow(() -> new BookingNotFoundException("Booking not found with id: " + id));
     }
 
     @Override
