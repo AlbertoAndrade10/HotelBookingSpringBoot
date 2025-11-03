@@ -1,8 +1,9 @@
-package java.com.porfolio.hotel_service.dto;
+package com.porfolio.hotel_service.dto;
+
+import com.porfolio.hotel_service.entity.Room;
 
 import java.math.BigDecimal;
 
-import java.com.porfolio.hotel_service.entity.Room;
 
 import lombok.Data;
 

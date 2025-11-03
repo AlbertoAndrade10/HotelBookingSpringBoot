@@ -1,11 +1,11 @@
-package java.com.porfolio.hotel_service.controller;
+package com.porfolio.hotel_service.controller;
 
-import java.com.porfolio.hotel_service.dto.CreateRoomRequest;
-import java.com.porfolio.hotel_service.dto.RoomResponse;
-import java.com.porfolio.hotel_service.entity.Hotel;
-import java.com.porfolio.hotel_service.entity.Room;
-import java.com.porfolio.hotel_service.repository.HotelRepository;
-import java.com.porfolio.hotel_service.repository.RoomRepository;
+import com.porfolio.hotel_service.dto.CreateRoomRequest;
+import com.porfolio.hotel_service.dto.RoomResponse;
+import com.porfolio.hotel_service.entity.Hotel;
+import com.porfolio.hotel_service.entity.Room;
+import com.porfolio.hotel_service.repository.HotelRepository;
+import com.porfolio.hotel_service.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

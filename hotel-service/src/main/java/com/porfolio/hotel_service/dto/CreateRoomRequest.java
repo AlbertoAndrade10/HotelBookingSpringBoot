@@ -1,4 +1,4 @@
-package java.com.porfolio.hotel_service.dto;
+package com.porfolio.hotel_service.dto;
 
 import java.math.BigDecimal;
 
