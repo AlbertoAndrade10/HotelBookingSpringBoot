@@ -1,4 +1,4 @@
-package com.porfolio.hotel_service;
+package java.com.porfolio.hotel_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

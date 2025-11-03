@@ -1,4 +1,4 @@
-package com.porfolio.hotel_service.entity;
+package java.com.porfolio.hotel_service.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
