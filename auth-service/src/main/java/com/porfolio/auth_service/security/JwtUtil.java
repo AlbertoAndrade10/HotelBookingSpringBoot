@@ -18,23 +18,21 @@ import java.util.function.Function;
 public class JwtUtil {
 
     private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-    private final Long expiration = 86400000L; // 24 horas en milisegundos
+    private final Long expiration = 86400000L;
 
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
-    // ✅ Método para obtener los roles del token
+    
     @SuppressWarnings("unchecked")
     public List<String> getRolesFromToken(String token) {
-        // Asumiendo que los roles están en un claim llamado "roles"
-        // Spring Security los almacena como "authorities", pero puedes mapearlos al claim "roles"
-        // Si guardas el rol como "ROLE_USER", puedes extraerlo así:
+       
         Object authorities = getClaimFromToken(token, t -> t.get("authorities"));
         if (authorities instanceof List) {
             return (List<String>) authorities;
         }
-        return List.of(); // Devuelve una lista vacía si no hay roles
+        return List.of(); 
     }
 
     public Date getExpirationDateFromToken(String token) {
@@ -59,13 +57,13 @@ public class JwtUtil {
         return expiration.before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails) { // Cambiado a UserDetails
+    public String generateToken(UserDetails userDetails) { 
         Map<String, Object> claims = new HashMap<>();
-        // ✅ Añadir el rol (o roles) al token como claim "authorities"
+        
         claims.put("authorities", userDetails.getAuthorities().stream()
                                                .map(auth -> auth.getAuthority())
-                                               .toList()); // Mapea las authorities a strings
-        return createToken(claims, userDetails.getUsername()); // Usa el username de UserDetails
+                                               .toList()); 
+        return createToken(claims, userDetails.getUsername()); 
     }
 
     private String createToken(Map<String, Object> claims, String subject) {

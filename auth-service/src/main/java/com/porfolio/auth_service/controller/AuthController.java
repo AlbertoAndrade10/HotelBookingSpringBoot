@@ -1,9 +1,11 @@
+// src/main/java/com/porfolio/auth_service/controller/AuthController.java
 package com.porfolio.auth_service.controller;
 
+import com.porfolio.auth_service.dto.UserLoginDTO;
+import com.porfolio.auth_service.dto.UserRegisterDTO;
 import com.porfolio.auth_service.service.IAuthService;
-import lombok.Data;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory; // Importar SLF4J
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,18 +17,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class); // Logger
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     private IAuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody UserRegisterDTO request) { // <-- Cambiado
         logger.info("AuthController: Entrando en /auth/register con email: {}", request.getEmail());
         try {
-            var user = authService.registerUser(request.getEmail(), request.getName(), request.getLastName(), request.getPassword());
+
+            var user = authService.registerUser(request);
             logger.info("AuthController: Usuario registrado exitosamente con ID: {}", user.getId());
-            return ResponseEntity.ok(user);
+
+            return ResponseEntity.ok("User registered successfully");
         } catch (RuntimeException e) {
             logger.error("AuthController: Error en /auth/register", e);
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -34,7 +38,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody UserLoginDTO request) {
         logger.info("AuthController: Entrando en /auth/login con email: {}", request.getEmail());
         try {
             String token = authService.loginUser(request.getEmail(), request.getPassword());
@@ -44,22 +48,6 @@ public class AuthController {
             logger.error("AuthController: Error en /auth/login", e);
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-    }
-
-    // aux class
-
-    @Data
-    public static class RegisterRequest {
-        private String email;
-        private String name;
-        private String lastName;
-        private String password;
-    }
-
-    @Data
-    public static class LoginRequest {
-        private String email;
-        private String password;
     }
 
     public static class JwtResponse {

@@ -28,13 +28,13 @@ public class CustomUserDetailsService implements UserDetailsService {
                 });
         logger.info("CustomUserDetailsService: Usuario encontrado con email: {}", user.getEmail());
         return User.builder()
-       .username(user.getEmail())
-       .password(user.getPassword())
-       .authorities(user.getRole())
-       .accountExpired(false)
-       .accountLocked(false)
-       .credentialsExpired(false)
-       .disabled(false)
-       .build();
+                .username(user.getEmail())
+                .password(user.getPassword())
+                .authorities(user.getRole())
+                .accountExpired(false)
+                .accountLocked(false)
+                .credentialsExpired(false)
+                .disabled(false)
+                .build();
     }
 }

@@ -1,6 +1,8 @@
 package com.porfolio.auth_service.service;
 
+import com.porfolio.auth_service.dto.UserRegisterDTO;
 import com.porfolio.auth_service.entity.User;
+import com.porfolio.auth_service.mapper.UserMapper;
 import com.porfolio.auth_service.repository.UserRepository;
 import com.porfolio.auth_service.security.JwtUtil;
 import org.slf4j.Logger;
@@ -8,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication; 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -63,7 +65,24 @@ public class AuthServiceImpl implements IAuthService {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         logger.info("AuthServiceImpl: Autenticación exitosa para email: {}", userDetails.getUsername());
-        
+
         return jwtUtil.generateToken(userDetails);
+    }
+
+    @Override
+    public User registerUser(UserRegisterDTO registerDTO) {
+        logger.info("AuthServiceImpl: Registrando usuario con DTO para email: {}", registerDTO.getEmail());
+        
+        if (userRepository.findByEmail(registerDTO.getEmail()).isPresent()) {
+            logger.error("AuthServiceImpl: Usuario con email {} ya existe.", registerDTO.getEmail());
+            throw new RuntimeException("User already exists with email: " + registerDTO.getEmail());
+        }
+        
+        User userToSave = UserMapper.toUserFromRegisterDto(registerDTO);
+       
+        userToSave.setPassword(passwordEncoder.encode(userToSave.getPassword()));
+        User savedUser = userRepository.save(userToSave);
+        logger.info("AuthServiceImpl: Usuario guardado con ID: {}", savedUser.getId());
+        return savedUser;
     }
 }
