@@ -23,31 +23,23 @@ public class AuthController {
     private IAuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserRegisterDTO request) { // <-- Cambiado
+    public ResponseEntity<?> register(@RequestBody UserRegisterDTO request) {
         logger.info("AuthController: Entrando en /auth/register con email: {}", request.getEmail());
-        try {
 
-            var user = authService.registerUser(request);
-            logger.info("AuthController: Usuario registrado exitosamente con ID: {}", user.getId());
+        var user = authService.registerUser(request);
 
-            return ResponseEntity.ok("User registered successfully");
-        } catch (RuntimeException e) {
-            logger.error("AuthController: Error en /auth/register", e);
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        logger.info("AuthController: Usuario registrado exitosamente con ID: {}", user.getId());
+        return ResponseEntity.ok("User registered successfully");
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserLoginDTO request) {
         logger.info("AuthController: Entrando en /auth/login con email: {}", request.getEmail());
-        try {
-            String token = authService.loginUser(request.getEmail(), request.getPassword());
-            logger.info("AuthController: Login exitoso para email: {}", request.getEmail());
-            return ResponseEntity.ok(new JwtResponse(token));
-        } catch (RuntimeException e) {
-            logger.error("AuthController: Error en /auth/login", e);
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    
+        String token = authService.loginUser(request.getEmail(), request.getPassword());
+        
+        logger.info("AuthController: Login exitoso para email: {}", request.getEmail());
+        return ResponseEntity.ok(new JwtResponse(token));
     }
 
     public static class JwtResponse {
